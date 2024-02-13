@@ -2,53 +2,56 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-int
-main(int argc, char *argv[])
-{
-  char parent_buf[1];
-  char child_buff[1];
-  int first[2];
-  int second[2];
-  int pid;
+int main(int argc, char *argv[]) {
+    if (argc != 1) {
+        printf("wrong usage");
+        exit(1);
+    }
 
-  pipe(first);
-  pipe(second);
-  parent_buf[1] = 'a';
-  child_buff[1] = 'a';
+    char parent_buf[1];
+    char child_buff[1];
+    int first[2];
+    int second[2];
+    int pid;
 
-  pid = fork();
+    pipe(first);
+    pipe(second);
+    parent_buf[1] = 'a';
+    child_buff[1] = 'a';
 
-  if (pid < 0) {
-    printf("error in fork");
-  }
+    pid = fork();
 
-  else if (pid > 0) {
+    if (pid < 0) {
+        printf("error in fork");
+    }
 
-    close(first[0]);
-    close(second[1]);
+    else if (pid > 0) {
 
-    write(first[1], parent_buf, 1);
-    close(first[1]);
-    
-    read(second[0], parent_buf, 1);
-    close(second[0]);
+        close(first[0]);
+        close(second[1]);
 
-    printf("%d: recieved pong\n", getpid());
-  }
+        write(first[1], parent_buf, 1);
+        close(first[1]);
+        
+        read(second[0], parent_buf, 1);
+        close(second[0]);
 
-  else {
+        printf("%d: received pong\n", getpid());
+    }
 
-    close(first[1]);
-    close(second[0]);
+    else {
 
-    read(first[0], child_buff, 1);
-    close(first[0]);
+        close(first[1]);
+        close(second[0]);
 
-    printf("%d: recieved ping\n",getpid());
+        read(first[0], child_buff, 1);
+        close(first[0]);
 
-    write(second[1], child_buff, 1);
-    close(second[1]);
-  }
+        printf("%d: received ping\n",getpid());
 
-  exit(0);
+        write(second[1], child_buff, 1);
+        close(second[1]);
+    }
+
+    exit(0);
 }
