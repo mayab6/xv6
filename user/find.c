@@ -27,7 +27,7 @@ char* fmtname(char *path) {
 void find(char *path, char* filename) {
 
   char buf[512], *p;
-  int fd, fd_2;
+  int fd;
   struct dirent de;
   struct stat st;
 
@@ -74,13 +74,7 @@ void find(char *path, char* filename) {
     
     case T_DIR:
       if (strcmp(fmtname(buf), ".") != 0 && strcmp(fmtname(buf), "..") != 0) {
-        printf("testing, going into %s. %s\n", buf, fmtname(buf));
-        if((fd_2 = open(buf, 0)) < 0){
-          fprintf(2, "find: cannot open %s\n", buf);
-          return;
-        }
         find(buf, filename);
-        close(fd_2);
       }
       break;
     
