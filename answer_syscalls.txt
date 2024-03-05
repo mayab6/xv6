@@ -1,0 +1,6 @@
+1. it seems that syscall.c called syscall().
+2. the value of p->trapframe->a7 is "0x7". looking at initcode.S, it semms this value represents SYS_exec.
+3. the value of the sstatus register is 0x22, which means that we have 0 in the SPP bit (8'th bit) - which means it was previously in user mode.
+4. the assembley instruction is: lw	a3,0(zero). a3 corresponds to num.
+5. the address 0 doesn't seem to be mapped. the value of scause is  0x000000000000000d, which means an instruction page fault - which indeed matches an unmapped address.
+6. the binary that was running is "initcode", its pid is 1.
