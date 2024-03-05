@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* changes newline to \0 for execution */
-        if (buff[bufflen - 1] == 'n' || buff[bufflen - 1] == 'r') {
+        if (buff[bufflen - 1] == '\n' || buff[bufflen - 1] == '\r') {
             buff[bufflen - 1] = '\0';
             bufflen--;
         }
@@ -78,13 +78,14 @@ int main(int argc, char *argv[]) {
             wait(0);
         }
         else {
+
+            exec(cmdargs[0], cmdargs);
+            /* if reached here, exec failed */
             printf("exec ");
             for (i = 0; i < xargc; i++) {
                 printf("%s, ", cmdargs[i]);
             }
             printf("\n");
-            exec(cmdargs[0], cmdargs);
-            /* if reached here, exec failed */
             exit(-1);
         }
     }
